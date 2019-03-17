@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Page Title</title>
+</head>
+<body>
+  <script>
+
+    let options = [
+             'rock', 'paper', 'scissors'
+         ];
+ 	function computerPlay(){
+         return options[Math.floor(Math.random()*options.length)];
+     }
+
+    function playerInput(){
+        let select = prompt('Rock, paper or scissors?')
+
+        if(select.toLowerCase() == options[0] || select.toLowerCase() == options[1] 
+        || select.toLowerCase() == options[2]){
+            return select.toLowerCase()
+        }
+        else {
+            alert('Enter a valid option')
+            return playerInput()
+        }
+
+     }
+
+     function gameLength(){
+         let num = prompt('Until how many wins do you want to play? (Enter a number between 1-10)')
+
+         if(isNaN(num)){
+             alert('Please enter a number')
+             return gameLength()
+         }
+         else if(num <= 0 || num > 11){
+             alert('Enter a number between 1-10')
+             return gameLength()
+         }
+         else{
+             return num
+         }
+     }
+
+     function game(){
+
+        let playerScore = 0
+        let computerScore = 0
+
+        let length = gameLength()
+
+        function playRound(playerSelection, computerSelection){
+            if(playerSelection == options[0] & computerSelection == options[2]){
+                playerScore++;
+                return 'You Win! Rock beats Scissors'
+            }
+            else if(playerSelection == options[0] && computerSelection == options[1]){
+                computerScore++;
+                return 'You Lose! Paper beats Rock'
+            }
+            else if(playerSelection == options[2] && computerSelection == options[1]){
+                playerScore++;
+                return 'You Win! Scissors beats Paper'
+            }
+            else if(playerSelection == options[2] && computerSelection == options[0]){
+                computerScore++;
+                return 'You Lose! Rock beats Scissors'
+            }
+            else if(playerSelection == options[1] && computerSelection == options[0]){
+                playerScore++;
+                return 'You Win! Paper beats Rock'
+            }
+            else if(playerSelection == options[1] && computerSelection == options[2]){
+                computerScore++;
+                return 'You Lose! Scissors beats Paper'
+            }
+            else {
+                return 'It\'s a tie!'
+            }
+
+        }
+        
+        while(playerScore < length && computerScore < length){
+            alert(playRound(playerInput(), computerPlay()) + '\nYour score: ' 
+            + playerScore + '\nComputer score: ' + computerScore)
+            //alert('Your score: ' + playerScore)
+            //alert('Computer score: ' + computerScore)
+        }
+
+        if(playerScore == length){
+            return '///Player wins!'
+        }
+        else {
+            return '///Computer wins!'
+        }
+    }
+
+    alert(game())
+
+  </script>
+</body>
+</html>
