@@ -4,99 +4,135 @@
   <title>Page Title</title>
 </head>
 <body>
+
+    <p>Choose the game length!</p>
+    <p>Please input a number between 1 and 5:</p>
+
+    <input id="numb">
+
+    <button type="button" onclick="myFunction()">Submit</button>
+
+    <p id="demo"></p>
+
+    <div id="container"></div>
+
   <script>
 
     let options = [
-             'rock', 'paper', 'scissors'
-         ];
+            'rock', 'paper', 'scissors'
+        ];
  	function computerPlay(){
-         return options[Math.floor(Math.random()*options.length)];
-     }
+        return options[Math.floor(Math.random()*options.length)];
+    }
 
-    function playerInput(){
-        let select = prompt('Rock, paper or scissors?')
-
-        if(select.toLowerCase() == options[0] || select.toLowerCase() == options[1] 
-        || select.toLowerCase() == options[2]){
-            return select.toLowerCase()
+    function buttonSelect() {
+        for(let i = 0; i < options.length; i++){
+            let option = document.createElement("button");
+            document.body.appendChild(option);
+            option.innerHTML = options[i];
+            option.id = options[i];
         }
-        else {
-            alert('Enter a valid option')
-            return playerInput()
+        activateButtons();
+    }
+
+    let gameLength = 0;
+
+    function activateButtons(){
+        for(let i = 0; i < options.length; i++){
+            document.getElementById(options[i]).onclick = function(){
+                playerInput(this.id);
+            }
         }
+        computerScore = 0;
+        playerScore = 0;
+        scoreDisplay();
+    }
 
-     }
-
-     function gameLength(){
-         let num = prompt('Until how many wins do you want to play? (Enter a number between 1-10)')
-
-         if(isNaN(num)){
-             alert('Please enter a number')
-             return gameLength()
-         }
-         else if(num <= 0 || num > 11){
-             alert('Enter a number between 1-10')
-             return gameLength()
-         }
-         else{
-             return num
-         }
-     }
-
-     function game(){
-
-        let playerScore = 0
-        let computerScore = 0
-
-        let length = gameLength()
-
-        function playRound(playerSelection, computerSelection){
-            if(playerSelection == options[0] & computerSelection == options[2]){
-                playerScore++;
-                return 'You Win! Rock beats Scissors'
-            }
-            else if(playerSelection == options[0] && computerSelection == options[1]){
-                computerScore++;
-                return 'You Lose! Paper beats Rock'
-            }
-            else if(playerSelection == options[2] && computerSelection == options[1]){
-                playerScore++;
-                return 'You Win! Scissors beats Paper'
-            }
-            else if(playerSelection == options[2] && computerSelection == options[0]){
-                computerScore++;
-                return 'You Lose! Rock beats Scissors'
-            }
-            else if(playerSelection == options[1] && computerSelection == options[0]){
-                playerScore++;
-                return 'You Win! Paper beats Rock'
-            }
-            else if(playerSelection == options[1] && computerSelection == options[2]){
-                computerScore++;
-                return 'You Lose! Scissors beats Paper'
-            }
-            else {
-                return 'It\'s a tie!'
-            }
-
-        }
-        
-        while(playerScore < length && computerScore < length){
-            alert(playRound(playerInput(), computerPlay()) + '\nYour score: ' 
-            + playerScore + '\nComputer score: ' + computerScore)
-            //alert('Your score: ' + playerScore)
-            //alert('Computer score: ' + computerScore)
-        }
-
-        if(playerScore == length){
-            return '///Player wins!'
-        }
-        else {
-            return '///Computer wins!'
+    function deleteButtons(){
+        for(let i = 0; i < options.length; i++){
+            document.getElementById(options[i]).outerHTML = "";
         }
     }
 
-    alert(game())
+    function checkScore(){
+        if(playerScore == gameLength || computerScore == gameLength){
+            alert('Game over');
+            deleteButtons();
+        }
+    }
+
+    function scoreDisplay(){
+        player.textContent = 'Your Score: ' + playerScore;
+        cpu.textContent = 'Computer Score: ' + computerScore;
+    }
+
+    function myFunction() {
+        let x, text;
+
+        // Get the value of the input field with id="numb"
+        x = document.getElementById("numb").value;
+
+        // If x is Not a Number or less than one or greater than 10
+        if (isNaN(x) || x < 1 || x > 5) {
+            text = "Input not valid";
+        } 
+        else {
+            text = "Game length: " + x;
+            gameLength = x;
+            buttonSelect(); 
+        }
+        document.getElementById("demo").innerHTML = text;
+    }
+
+    const container = document.querySelector('#container');
+    const player = document.createElement('div');
+    const cpu = document.createElement('div');
+    player.classList.add('player');
+    cpu.classList.add('cpu');
+    container.appendChild(player);
+    container.appendChild(cpu);
+
+    let computerScore = 0;
+    let playerScore = 0;
+    
+    function playerInput(id){
+
+        if(id == options[0] && computerPlay() == options[2]){
+            playerScore++;
+            alert('You Win! Rock beats Scissors');
+            checkScore();
+        }
+        else if(id == options[0] && computerPlay() == options[1]){
+            computerScore++;
+            alert('You Lose! Paper beats Rock');
+            checkScore();
+        }
+        else if(id == options[2] && computerPlay() == options[1]){
+            playerScore++;
+            alert('You Win! Scissors beats Paper');
+            checkScore();
+        }
+        else if(id == options[2] && computerPlay() == options[0]){
+            computerScore++;
+            alert('You Lose! Rock beats Scissors');
+            checkScore();
+        }
+        else if(id == options[1] && computerPlay() == options[0]){
+            playerScore++;
+            alert('You Win! Paper beats Rock');
+            checkScore();
+        }
+        else if(id == options[1] && computerPlay() == options[2]){
+            computerScore++;
+            alert('You Lose! Scissors beats Paper');
+            checkScore();
+        }
+        else {
+            alert('It\'s a tie!');
+        }
+        scoreDisplay();
+    }
+
 
   </script>
 </body>
